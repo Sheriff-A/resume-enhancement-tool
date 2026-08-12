@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@import "./theme.css";
+@import "./design.css";
+
+* {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+}
+
+body {
+    @apply bg-slate-950 text-slate-600 dark:text-slate-400 antialiased selection:bg-primary-500/30 selection:text-primary-700 selection:dark:text-primary-200
+
+}
+
+h1 {
+    @apply text-5xl font-extrabold text-black dark:text-white;
+}
+
+h2 {
+    @apply text-4xl font-bold text-black dark:text-white;
+}
+
+h3 {
+    @apply text-3xl font-bold text-black dark:text-white;
+}
+
+h4 {
+    @apply text-2xl font-bold text-black dark:text-white;
+}
+
+h5 {
+    @apply text-xl font-bold text-black dark:text-white;
+}
+
+h6 {
+    @apply text-lg font-bold text-black dark:text-white;
+}
+
+p {
+    @apply text-slate-700 dark:text-slate-300;
+
+    &.caption {
+        @apply text-xs font-bold;
+    }
+}
+
+.sub-text {
+    @apply text-slate-600 dark:text-slate-400;
+}
+
+.subtle-text {
+    @apply text-slate-300 dark:text-slate-600;
+}
+
+/*TODO: Update The Color Here*/
+.placeholder {
+    opacity: 0.8;
+    background: #e5e5f7 radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) linear-gradient(#444cf7 2px, transparent 2px) linear-gradient(90deg, #444cf7 2px, #e5e5f7 2px) 25px 25px 0 -1px -1px 0;
+    background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+}
+
+/* Full Screen Loader */
+.general-loader {
+    @apply fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/75 dark:bg-gray-900/75;
+}
+
+.spinner {
+    @apply w-16 h-16 border-4 border-t-4 border-gray-200 border-t-primary rounded-full animate-spin;
+}
+
+.ff-font-sans * {
+    font-family: 'Roboto', sans-serif !important;
+}
+
+.ff-font-serif * {
+    font-family: 'Cambria', serif !important;
+}
+
+
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    * {
+        color: #000 !important;
+        background: white !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    #resume-preview {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+}

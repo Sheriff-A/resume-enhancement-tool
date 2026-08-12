@@ -1,5 +1,5 @@
 -- ============================================================================
--- Local demo seed data — Level Up / Resume Enhancement Tool
+-- Local demo seed data — Resume Enhancement Tool
 -- ============================================================================
 -- Runs automatically on `supabase start` (first run) and `supabase db reset`.
 -- LOCAL DEVELOPMENT ONLY. Never run this against a hosted/production project —
@@ -15,6 +15,14 @@
 -- Each account has 3 resumes spanning ~2018-2026, showing believable,
 -- average-person career growth: no elite schools, no big-name employers,
 -- modest specific accomplishments rather than superstar metrics.
+--
+-- Shape note: skills = [{name, type}], and responsibilities/notable_courses/
+-- awards/highlights = [{text, last_suggestion?}] per the app's ExtResume
+-- types. last_suggestion is transient: it is only present while an AI
+-- suggestion is awaiting the user's accept/deny decision. Most items are
+-- plain {text}; each person's current resume has one or two items with a
+-- pending last_suggestion, to show what an unresolved AI suggestion looks
+-- like in the data.
 -- ============================================================================
 
 
@@ -116,7 +124,7 @@ INSERT INTO public.resumes (
     NULL,
     'Dependable server with about a year of experience in busy restaurant settings. Comfortable multitasking during peak hours, handling cash and card payments accurately, and staying calm when the dining room gets full. Looking to bring the same reliability to a new role.',
     NULL, NULL,
-    '["Customer Service", "Cash Handling", "POS Systems", "Time Management", "Teamwork", "Food Safety Basics"]'::jsonb,
+    '[{"name":"Customer Service","type":"soft"},{"name":"Cash Handling","type":"hard"},{"name":"POS Systems","type":"hard"},{"name":"Time Management","type":"soft"},{"name":"Teamwork","type":"soft"},{"name":"Food Safety Basics","type":"hard"}]'::jsonb,
     false, 'modern', 'Server Resume (2019)', false
   ),
   (
@@ -126,7 +134,7 @@ INSERT INTO public.resumes (
     NULL,
     'Retail and food service professional with about four years of experience, including a year and a half leading shifts of four to six employees. Known for staying organized during busy periods and helping resolve customer issues before they become bigger problems.',
     'linkedin.com/in/maria-delgado-520', NULL,
-    '["Shift Supervision", "Scheduling", "Inventory Counts", "Customer Service", "Cash Handling", "POS Systems", "Conflict Resolution", "Onboarding New Staff"]'::jsonb,
+    '[{"name":"Shift Supervision","type":"soft"},{"name":"Scheduling","type":"hard"},{"name":"Inventory Counts","type":"hard"},{"name":"Customer Service","type":"soft"},{"name":"Cash Handling","type":"hard"},{"name":"POS Systems","type":"hard"},{"name":"Conflict Resolution","type":"soft"},{"name":"Onboarding New Staff","type":"soft"}]'::jsonb,
     false, 'modern', 'Shift Lead Resume (2022)', true
   ),
   (
@@ -136,7 +144,7 @@ INSERT INTO public.resumes (
     NULL,
     'Retail manager with seven years of combined food service and retail experience, including nearly three years in supervisory and management roles. Comfortable managing a small team, tracking inventory, and keeping a store running smoothly during busy seasons.',
     'linkedin.com/in/maria-delgado-520', NULL,
-    '["Team Leadership", "Inventory Management", "Staff Scheduling", "Hiring and Onboarding", "Customer Service", "Loss Prevention Basics", "POS Systems", "Vendor Communication"]'::jsonb,
+    '[{"name":"Team Leadership","type":"soft"},{"name":"Inventory Management","type":"hard"},{"name":"Staff Scheduling","type":"hard"},{"name":"Hiring and Onboarding","type":"soft"},{"name":"Customer Service","type":"soft"},{"name":"Loss Prevention Basics","type":"hard"},{"name":"POS Systems","type":"hard"},{"name":"Vendor Communication","type":"soft"}]'::jsonb,
     true, 'modern', 'Assistant Store Manager Resume (2026)', true
   );
 
@@ -184,35 +192,35 @@ INSERT INTO public.experience (
     '2019-03-10 09:00:00+00', '2019-03-10 09:00:00+00',
     'Server', 'Corner Diner', 'Tucson, AZ',
     '2018-06-15', NULL,
-    '["Took orders and served food for a 40-seat restaurant during breakfast and lunch rushes", "Handled cash and card payments and balanced the till at the end of each shift", "Helped train two new servers on menu items and table sections", "Regularly received positive feedback from regular customers"]'::jsonb
+    '[{"text":"Took orders and served food for a 40-seat restaurant during breakfast and lunch rushes"},{"text":"Handled cash and card payments and balanced the till at the end of each shift"},{"text":"Helped train two new servers on menu items and table sections"},{"text":"Regularly received positive feedback from regular customers"}]'::jsonb
   ),
   (
     '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-aaaaaaaaaaa2',
     '2022-05-18 09:00:00+00', '2022-05-18 09:00:00+00',
     'Server', 'Corner Diner', 'Tucson, AZ',
     '2018-06-15', '2019-09-30',
-    '["Took orders and served food during breakfast and lunch rushes for a 40-seat restaurant", "Handled cash and card payments and balanced the till at the end of each shift", "Helped train two new servers on menu items and table sections"]'::jsonb
+    '[{"text":"Took orders and served food during breakfast and lunch rushes for a 40-seat restaurant"},{"text":"Handled cash and card payments and balanced the till at the end of each shift"},{"text":"Helped train two new servers on menu items and table sections"}]'::jsonb
   ),
   (
     '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-aaaaaaaaaaa2',
     '2022-05-18 09:00:00+00', '2022-05-18 09:00:00+00',
     'Shift Lead', 'Corner Diner', 'Tucson, AZ',
     '2019-10-01', NULL,
-    '["Oversee four to six staff members per shift, assigning sections and covering breaks", "Built the weekly staff schedule and adjusted it around call-outs", "Counted the register and prepared the nightly deposit", "Stepped in to handle customer complaints when a manager was not available"]'::jsonb
+    '[{"text":"Oversee four to six staff members per shift, assigning sections and covering breaks"},{"text":"Built the weekly staff schedule and adjusted it around call-outs"},{"text":"Counted the register and prepared the nightly deposit"},{"text":"Stepped in to handle customer complaints when a manager was not available"}]'::jsonb
   ),
   (
     '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-aaaaaaaaaaa3',
     '2026-02-09 09:00:00+00', '2026-02-09 09:00:00+00',
     'Sales Associate', 'TrailMix Outfitters', 'Tucson, AZ',
     '2021-11-08', '2023-04-14',
-    '["Assisted customers with gear selection for hiking and camping trips", "Restocked shelves and helped with twice-yearly full-store inventory counts", "Consistently met individual sales goals during the spring and summer season"]'::jsonb
+    '[{"text":"Assisted customers with gear selection for hiking and camping trips"},{"text":"Restocked shelves and helped with twice-yearly full-store inventory counts"},{"text":"Consistently met individual sales goals during the spring and summer season"}]'::jsonb
   ),
   (
     '11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-aaaaaaaaaaa3',
     '2026-02-09 09:00:00+00', '2026-02-09 09:00:00+00',
     'Assistant Store Manager', 'TrailMix Outfitters', 'Tucson, AZ',
     '2023-04-15', NULL,
-    '["Help manage a team of eight part-time and full-time sales associates", "Build the monthly staff schedule and approve time-off requests", "Track weekly inventory counts and place reorders for fast-moving items", "Reduced late vendor deliveries by adjusting the store order schedule", "Step in for the store manager during vacations and sick days"]'::jsonb
+    '[{"text":"Help manage a team of eight part-time and full-time sales associates"},{"text":"Build the monthly staff schedule and approve time-off requests"},{"text":"Track weekly inventory counts and place reorders for fast-moving items"},{"text":"Adjusted the store order schedule to help cut down on late vendor deliveries","last_suggestion":"Adjusted the store order schedule to cut late vendor deliveries by about 20 percent"},{"text":"Step in for the store manager during vacations and sick days","last_suggestion":"Provide full operational leadership coverage during manager absences"}]'::jsonb
   );
 
 INSERT INTO public.projects (
@@ -223,7 +231,7 @@ INSERT INTO public.projects (
   '2026-02-09 09:00:00+00', '2026-02-09 09:00:00+00',
   'Backroom Inventory Reorganization', NULL,
   '2024-03-01', '2024-05-01',
-  '["Reorganized the backroom storage layout to group items by category", "Cut the time it takes staff to locate reorder stock by roughly a third", "Trained the rest of the team on the new system"]'::jsonb
+  '[{"text":"Reorganized the backroom storage layout to group items by category"},{"text":"Cut the time it takes staff to locate reorder stock by roughly a third"},{"text":"Trained the rest of the team on the new system"}]'::jsonb
 );
 
 INSERT INTO public.reviews (
@@ -231,18 +239,73 @@ INSERT INTO public.reviews (
 ) VALUES (
   '2026-02-10 09:00:00+00',
   '{
-    "overall_score": 72,
-    "strengths": [
-      "Clear progression from server to shift lead to assistant manager makes the career growth easy to follow",
-      "The backroom reorganization project gives a concrete example of initiative beyond day-to-day duties"
+    "meta": {
+      "report_type": "paid",
+      "role_targeted": "Assistant Store Manager",
+      "seniority_estimate": "mid",
+      "confidence_level": "high"
+    },
+    "overall_score": {
+      "value": 72,
+      "label": "Good foundation with a few clear wins available",
+      "explanation": "Your career progression from server to shift lead to assistant manager is easy to follow and shows real growth, but a few bullets are missing the specific numbers that would make your impact easier for a hiring manager to judge at a glance."
+    },
+    "subscores": {
+      "ats_match": { "value": 68, "summary": "Core retail management keywords are present, but a few common terms like inventory management software or POS platform names are missing." },
+      "role_alignment": { "value": 81, "summary": "Experience maps closely to typical assistant store manager postings, especially around scheduling, inventory, and staff supervision." },
+      "clarity_impact": { "value": 66, "summary": "Bullets describe responsibilities well but under-use specific numbers to show impact." }
+    },
+    "key_gaps": {
+      "missing_skills": ["Inventory Management Software", "Loss Prevention Reporting", "Basic P&L Awareness"],
+      "experience_gaps": [
+        "No mention of hiring or interviewing experience, even though onboarding is listed",
+        "No example of handling a difficult customer escalation beyond day-to-day service"
+      ]
+    },
+    "prioritized_improvements": [
+      {
+        "priority": "high",
+        "title": "Add a specific number to the vendor delivery improvement bullet",
+        "impact_score_gain_estimate": 6,
+        "reason": "This is your strongest process-improvement example, but without a number it reads like a routine task rather than a measurable win."
+      },
+      {
+        "priority": "medium",
+        "title": "Trim the sales associate bullet points now that assistant manager is the more relevant role",
+        "impact_score_gain_estimate": 3,
+        "reason": "Recruiters spend more time on your most recent, most relevant role, so shorter earlier entries keep attention where it matters."
+      },
+      {
+        "priority": "low",
+        "title": "Add a one-line target statement about store size or team size you are looking for next",
+        "impact_score_gain_estimate": 2,
+        "reason": "Helps a recruiter quickly match you to the right opening without reading the full resume."
+      }
     ],
-    "suggestions": [
-      "Add a specific number to the vendor delivery improvement if you can recall or estimate it",
-      "Consider trimming the sales associate bullet points now that assistant manager is the most relevant role",
-      "A short one-line summary of what kind of store or team size you are looking for next could help focus the resume"
-    ]
+    "career_strategy": {
+      "application_advice": [
+        "Apply directly to assistant and associate store manager openings rather than general retail postings",
+        "Lead with the vendor delivery and inventory reorganization examples in your cover letter, since those show initiative beyond routine duties"
+      ],
+      "role_targeting_advice": [
+        "Target mid-size specialty retail chains similar to your current employer before larger big-box chains, where management tracks are often more structured",
+        "Store manager roles are likely one to two years away with continued growth in scheduling and P&L exposure"
+      ],
+      "market_readiness": "Ready to apply now for assistant store manager roles; would benefit from six months to a year of budget or P&L exposure before targeting full store manager positions."
+    },
+    "interview_signals": {
+      "strengths": [
+        "Clear, steady career progression within a single retail path shows reliability",
+        "Concrete process-improvement example (backroom reorganization) gives a strong story for behavioral interview questions"
+      ],
+      "risk_areas": [
+        "May be asked about formal budget or P&L experience, which is not yet reflected on the resume",
+        "Limited experience managing a full-size store team; be ready to speak to how current team-of-eight experience would scale"
+      ]
+    },
+    "confidence_note": "Based on the resume text provided; verifying actual metrics behind the vendor delivery and reorganization examples would strengthen this analysis further."
   }'::jsonb,
-  'general',
+  'paid',
   '11111111-1111-1111-1111-aaaaaaaaaaa3',
   '11111111-1111-1111-1111-111111111111'
 );
@@ -264,7 +327,7 @@ INSERT INTO public.resumes (
     NULL,
     'Recent business administration graduate looking for an entry-level office role. Comfortable with scheduling software, basic bookkeeping tasks, and greeting clients professionally.',
     NULL, NULL,
-    '["Microsoft Office", "Scheduling Software", "Phone Etiquette", "Data Entry", "Basic Bookkeeping", "Customer Service"]'::jsonb,
+    '[{"name":"Microsoft Office","type":"hard"},{"name":"Scheduling Software","type":"hard"},{"name":"Phone Etiquette","type":"soft"},{"name":"Data Entry","type":"hard"},{"name":"Basic Bookkeeping","type":"hard"},{"name":"Customer Service","type":"soft"}]'::jsonb,
     false, 'modern', 'Receptionist Resume (2018)', false
   ),
   (
@@ -274,7 +337,7 @@ INSERT INTO public.resumes (
     NULL,
     'Administrative professional with about three years of office experience, including front desk and general administrative support. Comfortable juggling scheduling, correspondence, and vendor coordination without much oversight.',
     'linkedin.com/in/david-chen-cbus', NULL,
-    '["Microsoft Office", "Calendar Management", "Vendor Coordination", "Data Entry", "Basic Bookkeeping", "Correspondence Drafting", "Customer Service"]'::jsonb,
+    '[{"name":"Microsoft Office","type":"hard"},{"name":"Calendar Management","type":"hard"},{"name":"Vendor Coordination","type":"soft"},{"name":"Data Entry","type":"hard"},{"name":"Basic Bookkeeping","type":"hard"},{"name":"Correspondence Drafting","type":"hard"},{"name":"Customer Service","type":"soft"}]'::jsonb,
     false, 'modern', 'Administrative Assistant Resume (2021)', true
   ),
   (
@@ -284,7 +347,7 @@ INSERT INTO public.resumes (
     NULL,
     'Office manager with about seven years of administrative experience, including two years managing office operations and supervising support staff for a small insurance agency. Focused on keeping the office running smoothly so agents can focus on clients.',
     'linkedin.com/in/david-chen-cbus', NULL,
-    '["Office Operations", "Budget Tracking", "Staff Supervision", "Vendor Contract Management", "Onboarding", "Microsoft Excel", "Calendar Management", "Process Improvement"]'::jsonb,
+    '[{"name":"Office Operations","type":"hard"},{"name":"Budget Tracking","type":"hard"},{"name":"Staff Supervision","type":"soft"},{"name":"Vendor Contract Management","type":"hard"},{"name":"Onboarding","type":"soft"},{"name":"Microsoft Excel","type":"hard"},{"name":"Calendar Management","type":"hard"},{"name":"Process Improvement","type":"soft"}]'::jsonb,
     false, 'technical', 'Office Manager Resume (2025)', true
   );
 
@@ -297,31 +360,31 @@ INSERT INTO public.education (
     '2018-08-20 09:00:00+00', '2018-08-20 09:00:00+00',
     'Associate of Applied Science, Business Administration', 'Riverside Community College',
     '2016-09-01', '2018-05-15', 'Columbus, OH', 'Business Administration',
-    '["Business Communications", "Introduction to Bookkeeping", "Business Law Basics"]'::jsonb,
-    '["Honor Roll, Fall 2017"]'::jsonb
+    '[{"text":"Business Communications"},{"text":"Introduction to Bookkeeping"},{"text":"Business Law Basics"}]'::jsonb,
+    '[{"text":"Honor Roll, Fall 2017"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa2',
     '2021-09-14 09:00:00+00', '2021-09-14 09:00:00+00',
     'Associate of Applied Science, Business Administration', 'Riverside Community College',
     '2016-09-01', '2018-05-15', 'Columbus, OH', 'Business Administration',
-    '["Business Communications", "Introduction to Bookkeeping", "Business Law Basics"]'::jsonb,
-    '["Honor Roll, Fall 2017"]'::jsonb
+    '[{"text":"Business Communications"},{"text":"Introduction to Bookkeeping"},{"text":"Business Law Basics"}]'::jsonb,
+    '[{"text":"Honor Roll, Fall 2017"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa3',
     '2025-11-03 09:00:00+00', '2025-11-03 09:00:00+00',
     'Associate of Applied Science, Business Administration', 'Riverside Community College',
     '2016-09-01', '2018-05-15', 'Columbus, OH', 'Business Administration',
-    '["Business Communications", "Introduction to Bookkeeping", "Business Law Basics"]'::jsonb,
-    '["Honor Roll, Fall 2017"]'::jsonb
+    '[{"text":"Business Communications"},{"text":"Introduction to Bookkeeping"},{"text":"Business Law Basics"}]'::jsonb,
+    '[{"text":"Honor Roll, Fall 2017"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa3',
     '2025-11-03 09:00:00+00', '2025-11-03 09:00:00+00',
     'Certificate in Office Administration', 'Riverside Community College - Continuing Education',
     '2023-01-10', '2023-05-20', 'Columbus, OH', NULL,
-    '["Office Budgeting Basics", "Business Writing"]'::jsonb, '[]'::jsonb
+    '[{"text":"Office Budgeting Basics"},{"text":"Business Writing"}]'::jsonb, '[]'::jsonb
   );
 
 INSERT INTO public.experience (
@@ -333,35 +396,35 @@ INSERT INTO public.experience (
     '2018-08-20 09:00:00+00', '2018-08-20 09:00:00+00',
     'Front Desk Receptionist', 'Bright Smiles Family Dental', 'Columbus, OH',
     '2018-06-04', NULL,
-    '["Greet patients and manage the front desk for a two-dentist practice", "Schedule and confirm appointments for a full daily calendar", "Enter patient information and insurance details into the practice management system", "Answer phones and route calls to the right staff member"]'::jsonb
+    '[{"text":"Greet patients and manage the front desk for a two-dentist practice"},{"text":"Schedule and confirm appointments for a full daily calendar"},{"text":"Enter patient information and insurance details into the practice management system"},{"text":"Answer phones and route calls to the right staff member"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa2',
     '2021-09-14 09:00:00+00', '2021-09-14 09:00:00+00',
     'Front Desk Receptionist', 'Bright Smiles Family Dental', 'Columbus, OH',
     '2018-06-04', '2020-01-17',
-    '["Greeted patients and managed the front desk for a two-dentist practice", "Scheduled and confirmed appointments for a full daily calendar", "Entered patient information and insurance details into the practice management system"]'::jsonb
+    '[{"text":"Greeted patients and managed the front desk for a two-dentist practice"},{"text":"Scheduled and confirmed appointments for a full daily calendar"},{"text":"Entered patient information and insurance details into the practice management system"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa2',
     '2021-09-14 09:00:00+00', '2021-09-14 09:00:00+00',
     'Administrative Assistant', 'Meridian Insurance Group', 'Columbus, OH',
     '2020-02-03', NULL,
-    '["Support a team of six insurance agents with scheduling and correspondence", "Coordinate with outside vendors for office supplies and equipment maintenance", "Draft routine client letters and internal memos", "Maintain digital and paper filing for active client policies"]'::jsonb
+    '[{"text":"Support a team of six insurance agents with scheduling and correspondence"},{"text":"Coordinate with outside vendors for office supplies and equipment maintenance"},{"text":"Draft routine client letters and internal memos"},{"text":"Maintain digital and paper filing for active client policies"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa3',
     '2025-11-03 09:00:00+00', '2025-11-03 09:00:00+00',
     'Administrative Assistant', 'Meridian Insurance Group', 'Columbus, OH',
     '2020-02-03', '2023-06-30',
-    '["Supported a team of six insurance agents with scheduling and correspondence", "Coordinated with outside vendors for office supplies and equipment maintenance", "Maintained digital and paper filing for active client policies"]'::jsonb
+    '[{"text":"Supported a team of six insurance agents with scheduling and correspondence"},{"text":"Coordinated with outside vendors for office supplies and equipment maintenance"},{"text":"Maintained digital and paper filing for active client policies"}]'::jsonb
   ),
   (
     '22222222-2222-2222-2222-222222222222', '22222222-2222-2222-2222-aaaaaaaaaaa3',
     '2025-11-03 09:00:00+00', '2025-11-03 09:00:00+00',
     'Office Manager', 'Meridian Insurance Group', 'Columbus, OH',
     '2023-07-01', NULL,
-    '["Manage day-to-day office operations for a nine-person branch", "Supervise two administrative support staff, including onboarding and scheduling", "Track the branch office budget and review monthly expense reports", "Negotiated a renewed copier and supply contract that lowered monthly costs slightly", "Point of contact for building management and office equipment vendors"]'::jsonb
+    '[{"text":"Manage day-to-day office operations for a nine-person branch"},{"text":"Supervise two administrative support staff, including onboarding and scheduling"},{"text":"Track the branch office budget and review monthly expense reports"},{"text":"Negotiated a renewed copier and supply contract that lowered monthly office costs","last_suggestion":"Negotiated a renewed copier and supply contract that lowered monthly office costs by about 8 percent"},{"text":"Point of contact for building management and office equipment vendors"}]'::jsonb
   );
 
 INSERT INTO public.projects (
@@ -372,7 +435,7 @@ INSERT INTO public.projects (
   '2025-11-03 09:00:00+00', '2025-11-03 09:00:00+00',
   'Digital Filing Transition', NULL,
   '2024-02-01', '2024-06-01',
-  '["Led the move from paper client files to a shared digital document system for the branch", "Trained agents and support staff on the new folder structure and naming conventions", "Reduced time spent searching for client documents during the transition period"]'::jsonb
+  '[{"text":"Led the move from paper client files to a shared digital document system for the branch"},{"text":"Trained agents and support staff on the new folder structure and naming conventions"},{"text":"Reduced time spent searching for client documents during the transition period"}]'::jsonb
 );
 
 INSERT INTO public.reviews (
@@ -380,18 +443,31 @@ INSERT INTO public.reviews (
 ) VALUES (
   '2025-11-04 09:00:00+00',
   '{
-    "overall_score": 76,
-    "strengths": [
-      "Strong progression from receptionist to administrative assistant to office manager is easy to follow at a glance",
-      "The digital filing project is a good concrete example of leading change, not just maintaining it"
+    "meta": {
+      "report_type": "freemium",
+      "role_targeted": "Office Manager",
+      "seniority_estimate": "mid"
+    },
+    "overall_score": {
+      "value": 76,
+      "label": "Solid, needs a few targeted fixes"
+    },
+    "subscores": {
+      "ats_match": "medium",
+      "role_alignment": "high",
+      "clarity_impact": "medium"
+    },
+    "top_issues": [
+      "The copier contract savings line is missing a number, which weakens an otherwise strong bullet",
+      "Skills section mixes hard and soft skills together with no grouping, making it harder to scan quickly",
+      "Summary does not mention the size of the team or budget you manage"
     ],
-    "suggestions": [
-      "The cost savings from the copier contract renewal could use a rough number or percentage if you have one",
-      "Consider adding one line about the size of the budget you track for extra context",
-      "A skills section this long is fine, but grouping related skills together could make it easier to scan"
-    ]
+    "career_fit_signal": {
+      "summary": "Your background points clearly toward office manager and operations coordinator roles at small to mid-size companies."
+    },
+    "confidence_note": "Based on limited resume text alone; a cover letter or portfolio could sharpen this further."
   }'::jsonb,
-  'general',
+  'freemium',
   '22222222-2222-2222-2222-aaaaaaaaaaa3',
   '22222222-2222-2222-2222-222222222222'
 );
@@ -413,7 +489,7 @@ INSERT INTO public.resumes (
     NULL,
     'Recent accounting graduate with hands-on experience from a school internship. Detail-oriented and comfortable working with spreadsheets and basic accounting software. Looking for an entry-level accounts payable or bookkeeping role.',
     NULL, NULL,
-    '["Microsoft Excel", "Data Entry", "Accounts Payable Basics", "Attention to Detail", "QuickBooks (Basic)"]'::jsonb,
+    '[{"name":"Microsoft Excel","type":"hard"},{"name":"Data Entry","type":"hard"},{"name":"Accounts Payable Basics","type":"hard"},{"name":"Attention to Detail","type":"soft"},{"name":"QuickBooks (Basic)","type":"hard"}]'::jsonb,
     false, 'modern', 'Accounts Payable Clerk Resume (2019)', false
   ),
   (
@@ -423,7 +499,7 @@ INSERT INTO public.resumes (
     NULL,
     'Bookkeeper with about four years of accounting experience, including full-cycle bookkeeping for a small dental practice. Comfortable handling payroll, reconciliations, and month-end reporting with minimal supervision.',
     'linkedin.com/in/aisha-bennett-pdx', NULL,
-    '["QuickBooks Online", "Payroll Processing", "Accounts Payable and Receivable", "Bank Reconciliation", "Basic Financial Reporting", "Microsoft Excel"]'::jsonb,
+    '[{"name":"QuickBooks Online","type":"hard"},{"name":"Payroll Processing","type":"hard"},{"name":"Accounts Payable and Receivable","type":"hard"},{"name":"Bank Reconciliation","type":"hard"},{"name":"Basic Financial Reporting","type":"hard"},{"name":"Microsoft Excel","type":"hard"}]'::jsonb,
     false, 'modern', 'Bookkeeper Resume (2022)', true
   ),
   (
@@ -433,7 +509,7 @@ INSERT INTO public.resumes (
     NULL,
     'Staff accountant with about seven years of bookkeeping and accounting experience, now supporting month-end close and tax season work for multiple small-business clients at a local accounting firm. Comfortable managing several clients at once without losing track of details.',
     'linkedin.com/in/aisha-bennett-pdx', NULL,
-    '["Month-End Close", "Multi-Client Bookkeeping", "QuickBooks Online", "Payroll Processing", "Tax Season Support", "Bank Reconciliation", "Client Communication"]'::jsonb,
+    '[{"name":"Month-End Close","type":"hard"},{"name":"Multi-Client Bookkeeping","type":"hard"},{"name":"QuickBooks Online","type":"hard"},{"name":"Payroll Processing","type":"hard"},{"name":"Tax Season Support","type":"hard"},{"name":"Bank Reconciliation","type":"hard"},{"name":"Client Communication","type":"soft"}]'::jsonb,
     false, 'technical', 'Staff Accountant Resume (2026)', true
   );
 
@@ -446,14 +522,14 @@ INSERT INTO public.education (
     '2019-01-22 09:00:00+00', '2019-01-22 09:00:00+00',
     'Associate Degree in Accounting', 'Westbrook Community College',
     '2016-09-01', '2018-12-15', 'Portland, OR', 'Accounting',
-    '["Financial Accounting I", "Payroll Fundamentals", "Business Tax Basics"]'::jsonb, '[]'::jsonb
+    '[{"text":"Financial Accounting I"},{"text":"Payroll Fundamentals"},{"text":"Business Tax Basics"}]'::jsonb, '[]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa2',
     '2022-03-07 09:00:00+00', '2022-03-07 09:00:00+00',
     'Associate Degree in Accounting', 'Westbrook Community College',
     '2016-09-01', '2018-12-15', 'Portland, OR', 'Accounting',
-    '["Financial Accounting I", "Payroll Fundamentals", "Business Tax Basics"]'::jsonb, '[]'::jsonb
+    '[{"text":"Financial Accounting I"},{"text":"Payroll Fundamentals"},{"text":"Business Tax Basics"}]'::jsonb, '[]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa2',
@@ -466,7 +542,7 @@ INSERT INTO public.education (
     '2026-01-19 09:00:00+00', '2026-01-19 09:00:00+00',
     'Associate Degree in Accounting', 'Westbrook Community College',
     '2016-09-01', '2018-12-15', 'Portland, OR', 'Accounting',
-    '["Financial Accounting I", "Payroll Fundamentals", "Business Tax Basics"]'::jsonb, '[]'::jsonb
+    '[{"text":"Financial Accounting I"},{"text":"Payroll Fundamentals"},{"text":"Business Tax Basics"}]'::jsonb, '[]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa3',
@@ -484,35 +560,35 @@ INSERT INTO public.experience (
     '2019-01-22 09:00:00+00', '2019-01-22 09:00:00+00',
     'Accounts Payable Clerk', 'Hallwell Construction Co.', 'Portland, OR',
     '2018-09-10', NULL,
-    '["Process vendor invoices and match them against purchase orders", "Enter and code invoices in the accounting system for a mid-size construction company", "Respond to vendor questions about payment status", "Assist with the monthly accounts payable aging report"]'::jsonb
+    '[{"text":"Process vendor invoices and match them against purchase orders"},{"text":"Enter and code invoices in the accounting system for a mid-size construction company"},{"text":"Respond to vendor questions about payment status"},{"text":"Assist with the monthly accounts payable aging report"}]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa2',
     '2022-03-07 09:00:00+00', '2022-03-07 09:00:00+00',
     'Accounts Payable Clerk', 'Hallwell Construction Co.', 'Portland, OR',
     '2018-09-10', '2020-06-19',
-    '["Processed vendor invoices and matched them against purchase orders", "Entered and coded invoices in the accounting system", "Assisted with the monthly accounts payable aging report"]'::jsonb
+    '[{"text":"Processed vendor invoices and matched them against purchase orders"},{"text":"Entered and coded invoices in the accounting system"},{"text":"Assisted with the monthly accounts payable aging report"}]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa2',
     '2022-03-07 09:00:00+00', '2022-03-07 09:00:00+00',
     'Bookkeeper', 'Lakeview Family Dentistry', 'Portland, OR',
     '2020-07-06', NULL,
-    '["Handle full-cycle bookkeeping for a two-dentist practice, including AP, AR, and payroll for fifteen employees", "Reconcile bank and credit card statements each month", "Prepare basic monthly financial reports for the practice owner", "Coordinate with the outside CPA firm during tax season"]'::jsonb
+    '[{"text":"Handle full-cycle bookkeeping for a two-dentist practice, including AP, AR, and payroll for fifteen employees"},{"text":"Reconcile bank and credit card statements each month"},{"text":"Prepare basic monthly financial reports for the practice owner"},{"text":"Coordinate with the outside CPA firm during tax season"}]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa3',
     '2026-01-19 09:00:00+00', '2026-01-19 09:00:00+00',
     'Bookkeeper', 'Lakeview Family Dentistry', 'Portland, OR',
     '2020-07-06', '2023-09-15',
-    '["Handled full-cycle bookkeeping for a two-dentist practice, including AP, AR, and payroll for fifteen employees", "Reconciled bank and credit card statements each month", "Coordinated with the outside CPA firm during tax season"]'::jsonb
+    '[{"text":"Handled full-cycle bookkeeping for a two-dentist practice, including AP, AR, and payroll for fifteen employees"},{"text":"Reconciled bank and credit card statements each month"},{"text":"Coordinated with the outside CPA firm during tax season"}]'::jsonb
   ),
   (
     '33333333-3333-3333-3333-333333333333', '33333333-3333-3333-3333-aaaaaaaaaaa3',
     '2026-01-19 09:00:00+00', '2026-01-19 09:00:00+00',
     'Staff Accountant', 'Coastal Tax and Accounting Partners', 'Portland, OR',
     '2023-10-02', NULL,
-    '["Manage month-end close for a portfolio of about ten small-business clients", "Prepare account reconciliations and basic financial statements for client review", "Support the tax team by organizing client records during filing season", "Trained one new hire on the firm standard bookkeeping checklist"]'::jsonb
+    '[{"text":"Manage month-end close for a portfolio of about ten small-business clients"},{"text":"Prepare account reconciliations and basic financial statements for client review"},{"text":"Support the tax team by organizing client records during filing season"},{"text":"Trained one new hire on the firm standard bookkeeping checklist"}]'::jsonb
   );
 
 INSERT INTO public.projects (
@@ -523,7 +599,7 @@ INSERT INTO public.projects (
   '2026-01-19 09:00:00+00', '2026-01-19 09:00:00+00',
   'Client QuickBooks Migration', NULL,
   '2024-01-08', '2024-04-15',
-  '["Helped migrate twelve small-business clients from spreadsheets to QuickBooks Online ahead of tax season", "Built a standard chart of accounts template used across similar clients", "Reduced back-and-forth with clients by documenting a simple monthly checklist for them to follow"]'::jsonb
+  '[{"text":"Helped migrate twelve small-business clients from spreadsheets to QuickBooks Online ahead of tax season"},{"text":"Built a standard chart of accounts template used across similar clients"},{"text":"Reduced back-and-forth emails with clients by documenting a simple monthly checklist for them to follow","last_suggestion":"Reduced back-and-forth emails with clients by about half by documenting a simple monthly checklist for them to follow"}]'::jsonb
 );
 
 INSERT INTO public.reviews (
@@ -531,18 +607,73 @@ INSERT INTO public.reviews (
 ) VALUES (
   '2026-01-20 09:00:00+00',
   '{
-    "overall_score": 78,
-    "strengths": [
-      "The QuickBooks migration project shows initiative that goes beyond routine bookkeeping work",
-      "Consistent use of specific numbers, like client counts and employee counts, makes the experience easy to picture"
+    "meta": {
+      "report_type": "paid",
+      "role_targeted": "Staff Accountant",
+      "seniority_estimate": "mid",
+      "confidence_level": "high"
+    },
+    "overall_score": {
+      "value": 78,
+      "label": "Strong, detail-oriented resume with a few polish opportunities",
+      "explanation": "Consistent use of specific numbers, like client counts and employee counts, makes your experience easy to picture, and the QuickBooks migration project shows initiative beyond routine bookkeeping work."
+    },
+    "subscores": {
+      "ats_match": { "value": 79, "summary": "Strong match on core bookkeeping and accounting keywords, including QuickBooks Online, reconciliation, and payroll." },
+      "role_alignment": { "value": 83, "summary": "Experience aligns well with staff accountant postings at small firms and multi-client environments." },
+      "clarity_impact": { "value": 74, "summary": "Bullets are specific and easy to follow, though a few could quantify time saved more precisely." }
+    },
+    "key_gaps": {
+      "missing_skills": ["General Ledger Review", "Journal Entries", "Tax Software (e.g. Drake, ProSeries)"],
+      "experience_gaps": [
+        "No mention of direct client-facing meetings or calls, only email communication",
+        "No mention of supervising or reviewing work completed by another bookkeeper"
+      ]
+    },
+    "prioritized_improvements": [
+      {
+        "priority": "medium",
+        "title": "Add a rough estimate of time saved by the new monthly client checklist",
+        "impact_score_gain_estimate": 4,
+        "reason": "You already quantify the reduction in emails; adding a time estimate would make the business impact even clearer."
+      },
+      {
+        "priority": "medium",
+        "title": "Mention what industries your current clients are in, if that varies",
+        "impact_score_gain_estimate": 3,
+        "reason": "Helps a hiring firm quickly see whether your client mix matches the industries they serve."
+      },
+      {
+        "priority": "low",
+        "title": "Add a line about comfort with tax preparation software, if any",
+        "impact_score_gain_estimate": 2,
+        "reason": "Many staff accountant roles at small firms expect some tax season involvement, and this is not yet addressed."
+      }
     ],
-    "suggestions": [
-      "Consider adding roughly how much time the new monthly checklist saved, even as a rough estimate",
-      "The staff accountant summary could mention what industries your current clients are in, if that varies",
-      "A short note about comfort with tax software, if any, could round out the skills section for accounting-firm roles"
-    ]
+    "career_strategy": {
+      "application_advice": [
+        "Lead with the QuickBooks migration project in your cover letter, since it shows process improvement rather than just day-to-day bookkeeping",
+        "Apply to small and mid-size accounting firms and multi-client bookkeeping practices where your current experience is the closest match"
+      ],
+      "role_targeting_advice": [
+        "Senior staff accountant or bookkeeping lead roles are a reasonable next step within one to two years, especially with more general ledger and journal entry exposure",
+        "CPA-track roles would likely require additional coursework or certification before being competitive"
+      ],
+      "market_readiness": "Ready to apply now for staff accountant and senior bookkeeper roles at small to mid-size firms."
+    },
+    "interview_signals": {
+      "strengths": [
+        "Steady progression from accounts payable clerk to bookkeeper to staff accountant shows consistent growth",
+        "Multi-client experience is a strong signal for public accounting firm interviews"
+      ],
+      "risk_areas": [
+        "Limited exposure to tax preparation specifically, which may come up for firms with a heavy tax season workload",
+        "No mention of reviewing or supervising other staff, which could be a gap for senior-level questions"
+      ]
+    },
+    "confidence_note": "Based on the resume text provided; discussing specific software and client industry details in an interview would round out this picture."
   }'::jsonb,
-  'general',
+  'paid',
   '33333333-3333-3333-3333-aaaaaaaaaaa3',
   '33333333-3333-3333-3333-333333333333'
 );
