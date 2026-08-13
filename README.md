@@ -140,5 +140,4 @@ Landing page after login — an overview with stats and recent activity. **Curre
 Update your profile: name, email, phone, location, portfolio/LinkedIn/GitHub links.
 
 ### Known stubs / in progress
-- `/cancel` is a placeholder page (intended for a cancelled-payment flow) — not yet implemented.
 - The Dashboard's stats/activity feed is sample data, not live data.
