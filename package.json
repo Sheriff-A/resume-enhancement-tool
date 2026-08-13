@@ -15,9 +15,50 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "nuxi build",
+    "dev": "bash scripts/dev.sh",
+    "generate": "nuxi generate",
+    "preview": "nuxi preview",
+    "postinstall": "nuxi prepare",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "types:generate": "supabase gen types typescript --local > models/supabase/database.types.ts",
+    "tailwind-output": "npx @tailwindcss/cli -i ./assets/css/main.css -o ./public/tailwind-pdf.css --minify"
+  },
+  "dependencies": {
+    "@nuxt/image": "^1.11.0",
+    "@nuxt/ui": "^3.1.1",
+    "@pdfme/common": "^6.0.6",
+    "@pdfme/generator": "^6.0.6",
+    "@pinia/nuxt": "^0.11.0",
+    "@supabase/supabase-js": "^2.49.4",
+    "@tailwindcss/vite": "^4.1.5",
+    "@vueuse/nuxt": "^13.7.0",
+    "formidable": "^3.5.4",
+    "luxon": "^3.6.1",
+    "mammoth": "^1.9.0",
+    "nuxt": "^3.17.2",
+    "nuxt-security": "^2.2.0",
+    "openai": "^4.98.0",
+    "pdf-parse": "^1.1.1",
+    "pinia": "^3.0.2",
+    "puppeteer": "^24.22.3",
+    "supabase": "^2.84.4",
+    "tailwindcss": "^4.1.5",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "supabase": "^2.114.0"
+    "@iconify-json/lucide": "^1.2.44",
+    "@nuxt/eslint": "^1.9.0",
+    "@nuxtjs/supabase": "1.4.6",
+    "@stylistic/eslint-plugin": "^5.5.0",
+    "@types/formidable": "^3.4.5",
+    "@types/luxon": "^3.6.2",
+    "@types/pdf-parse": "^1.1.5",
+    "clsx": "^2.1.1",
+    "eslint": "^9.38.0",
+    "typescript": "^5.9.3"
   }
 }
