@@ -3,7 +3,7 @@ import type { Resume } from '~/models/database'
 import { formatDateString } from '~/composables/helpers'
 
 interface Props {
-  resume: Resume & { score: number }
+  resume: Resume & { score: number, latestReviewId: string | null }
 }
 
 const props = defineProps<Props>()
@@ -22,11 +22,14 @@ function goToResume() {
 }
 
 function goToReview() {
-  const resumeId = props.resume.id
-  router.push({
-    name: 'score-resumeId',
-    params: { resumeId },
-  })
+  if (props.resume.latestReviewId) {
+    router.push({
+      name: 'score-reviewId',
+      params: { reviewId: props.resume.latestReviewId },
+    })
+    return
+  }
+  router.push({ name: 'score' })
 }
 
 function goToPublicResume() {

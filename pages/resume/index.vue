@@ -19,10 +19,14 @@ const sortOptions: { label: string, value: string }[] = [
 
 const resumeImportForm = ref<InstanceType<typeof ResumeImport>>();
 
-function getLatestReviewScore(
-  reviews?: Array<{ analysis: ResumeReport }> | null,
+function getLatestReview(
+  reviews?: Array<{ id: string, analysis: ResumeReport }> | null,
 ) {
-  return reviews?.[0]?.analysis.overall_score.value ?? null;
+  const latest = reviews?.[0];
+  return {
+    score: latest?.analysis.overall_score.value ?? null,
+    latestReviewId: latest?.id ?? null,
+  };
 }
 
 const { data, error, status, refresh } = useAsyncData(
@@ -36,7 +40,7 @@ const { data, error, status, refresh } = useAsyncData(
     // Load resumes for the authenticated user
     const { data, error } = await client
       .from('resumes')
-      .select('*, reviews(analysis)')
+      .select('*, reviews(id, analysis)')
       .eq('user_id', userId)
       .order('created_at', {
         ascending: false,
@@ -56,8 +60,8 @@ const { data, error, status, refresh } = useAsyncData(
 
     return (data || []).map(resume => ({
       ...resume,
-      score: getLatestReviewScore(
-        resume.reviews as (Array<{ analysis: ResumeReport }> | null),
+      ...getLatestReview(
+        resume.reviews as (Array<{ id: string, analysis: ResumeReport }> | null),
       ),
     }));
   },

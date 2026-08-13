@@ -26,11 +26,29 @@ export async function loadLatestReview(
   return data
 }
 
+export async function loadReviewById(
+  userId: string,
+  reviewId: string,
+): Promise<Review | null> {
+  const supabase = useSupabaseClient()
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('*, resume:resume_id(*)')
+    .eq('user_id', userId)
+    .eq('id', reviewId)
+    .maybeSingle()
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
 interface SaveReviewParams {
   userId: string
   resumeId: string
   type: ReviewType
-  score: number
   analysis: FreemiumReport | PaidReport
 }
 
@@ -38,7 +56,6 @@ export async function saveReview({
   userId,
   resumeId,
   type,
-  score,
   analysis,
 }: SaveReviewParams): Promise<Review> {
   const supabase = useSupabaseClient()
@@ -48,7 +65,6 @@ export async function saveReview({
       user_id: userId,
       resume_id: resumeId,
       type,
-      score,
       analysis: analysis as unknown as Review['analysis'],
     })
     .select('*')

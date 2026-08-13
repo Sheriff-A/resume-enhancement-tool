@@ -74,10 +74,20 @@ const columns: TableColumn<ReviewRow>[] = [
 ]
 
 function goToReview(row: { original: ReviewRow }) {
-  const resumeId = row.original.resume_id
+  const reviewId = row.original.id
   router.push({
-    name: 'score-resumeId',
-    params: { resumeId },
+    name: 'score-reviewId',
+    params: { reviewId },
+  })
+}
+
+const reviewModalOpen = ref(false)
+
+function handleReviewGenerated(reviewId: string) {
+  reviewModalOpen.value = false
+  router.push({
+    name: 'score-reviewId',
+    params: { reviewId },
   })
 }
 </script>
@@ -89,11 +99,20 @@ function goToReview(row: { original: ReviewRow }) {
         <h2>My Reviews</h2>
       </div>
       <div>
-        <UButton
-          to="/resume"
-          label="Review a Resume"
-          icon="i-lucide-brain"
-        />
+        <UDrawer
+          v-model:open="reviewModalOpen"
+          title="Review a Resume"
+          description="Pick a resume, tell us the role you're targeting, and choose how deep you want the review to go."
+          direction="right"
+        >
+          <UButton
+            label="Review a Resume"
+            icon="i-lucide-brain"
+          />
+          <template #body>
+            <ReportsGenerateReviewModal @generated="handleReviewGenerated" />
+          </template>
+        </UDrawer>
       </div>
     </div>
 

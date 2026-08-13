@@ -31,6 +31,29 @@ export async function loadResume(
   }
 }
 
+export interface ResumeSelectOption {
+  id: string
+  name: string
+  nickname: string
+}
+
+export async function listResumesForSelect(
+  userId: string,
+): Promise<ResumeSelectOption[]> {
+  const supabase = useSupabaseClient()
+  const { data, error } = await supabase
+    .from('resumes')
+    .select('id, name, nickname')
+    .eq('user_id', userId)
+    .order('updated_at', { ascending: false, nullsFirst: false })
+
+  if (error) {
+    throw new Error(`Failed to load resumes: ${error.message}`)
+  }
+
+  return data || []
+}
+
 type UpsertResumeResult = 'upsert' | 'insert'
 
 export async function upsertResume(
